@@ -2,7 +2,7 @@ package structs
 
 import "math"
 
-// Rectangle has the dimensoins of a rectangle
+// Rectangle has the dimensions of a rectangle
 type Rectangle struct {
 	Width  float64
 	Height float64
@@ -26,5 +26,16 @@ type Circle struct {
 // Area returns the area of the circle
 func (c Circle) Area() float64 {
   return math.Pi * c.Radius * c.Radius
+}
+
+// Triangle has te dimensions of a Triangle
+type Triangle struct {
+  Base float64
+  Height float64
+}
+
+// Area returns the area of the Triangle
+func (t Triangle) Area() float64 {
+  return (t.Base * t.Height) * 0.5
 }
 
