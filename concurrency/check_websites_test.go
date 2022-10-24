@@ -21,7 +21,7 @@ func TestCheckWebsites(t *testing.T) {
 	}
 
 	want := map[string]bool{
-		"https://google/com":          true,
+		"https://google.com":          true,
 		"https://blog.gypsydave5.com": true,
 		"waat://furhurterwe.geds":     false,
 	}
