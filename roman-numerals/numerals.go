@@ -1,15 +1,17 @@
-package romannumerals
+package v1
 
 import "strings"
 
-func ConvertToArabic(roman string) (total int) {
+// ConvertToArabic converts a Roman Numeral to an Arabic number.
+func ConvertToArabic(roman string) (total uint16) {
 	for _, symbols := range windowedRoman(roman).Symbols() {
 		total += allRomanNumerals.ValueOf(symbols...)
 	}
 	return
 }
 
-func ConvertToRoman(arabic int) string {
+// ConvertToRoman converts an Arabic number to a Roman Numeral.
+func ConvertToRoman(arabic uint16) string {
 	var result strings.Builder
 
 	for _, numeral := range allRomanNumerals {
@@ -23,13 +25,13 @@ func ConvertToRoman(arabic int) string {
 }
 
 type romanNumeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 
 type romanNumerals []romanNumeral
 
-func (r romanNumerals) ValueOf(symbols ...byte) int {
+func (r romanNumerals) ValueOf(symbols ...byte) uint16 {
 	symbol := string(symbols)
 	for _, s := range r {
 		if s.Symbol == symbol {
@@ -86,3 +88,4 @@ func (w windowedRoman) Symbols() (symbols [][]byte) {
 func isSubtractive(symbol uint8) bool {
 	return symbol == 'I' || symbol == 'X' || symbol == 'C'
 }
+
