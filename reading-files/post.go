@@ -1,19 +1,38 @@
 package blogposts
 
-import "io/fs"
+import (
+	"bufio"
+	"io"
+	"strings"
+)
 
-type Post struct{
-  Title string
+type Post struct {
+	Title       string
+	Description string
+	Tags        []string
 }
 
-func getPost(fileSystem fs.FS, fileName string) (Post, error) {
-  postFile, err := fileSystem.Open(fileName)
+const (
+	titleSeparator       = "Title: "
+	descriptionSeparator = "Description: "
+	tagsSeparator        = "Tags: "
+)
 
-  if err != nil {
-    return Post{}, err
-  }
+func newPost(postFile io.Reader) (Post, error) {
+	scanner := bufio.NewScanner(postFile)
 
-  defer postFile.Close()
+	readMetaLine := func(tagName string) string {
+		scanner.Scan()
+		return strings.TrimPrefix(scanner.Text(), tagName)
+	}
 
-  return newPost(postFile)
+	title := readMetaLine(titleSeparator)
+	description := readMetaLine(descriptionSeparator)
+	tags := readMetaLine(tagsSeparator)
+
+	return Post{
+		Title:       title,
+		Description: description,
+		Tags:        strings.Split(tags, ", "),
+	}, nil
 }
