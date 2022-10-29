@@ -4,6 +4,9 @@ import (
 	"embed"
 	"html/template"
 	"io"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 var (
@@ -14,6 +17,7 @@ var (
 // PostRenderer renders data into HTML
 type PostRenderer struct {
 	templ *template.Template
+  mdParser *parser.Parser
 }
 
 // NewPostRenderer creates a new PostRenderer
@@ -37,7 +41,13 @@ func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
   return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
 }
 
-type PostViewModel struct {
-	Title, SanitisedTitle, Description, Body string
-	Tags                                     []string
+type postViewModel struct {
+  Post
+  HTMLBody template.HTML
+}
+
+func newPostVM(p Post, r *PostRenderer) postViewModel {
+	vm := postViewModel{Post: p}
+	vm.HTMLBody = template.HTML(markdown.ToHTML([]byte(p.Body), r.mdParser, nil))
+	return vm
 }
