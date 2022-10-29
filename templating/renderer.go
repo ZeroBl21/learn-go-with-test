@@ -6,49 +6,38 @@ import (
 	"io"
 )
 
-type Post struct {
-	Title, Body, Description string
-	Tags                     []string
-}
-
 var (
 	//go:embed "templates/*"
 	postTemplates embed.FS
 )
 
-func Render(w io.Writer, p Post) error {
+// PostRenderer renders data into HTML
+type PostRenderer struct {
+	templ *template.Template
+}
+
+// NewPostRenderer creates a new PostRenderer
+func NewPostRenderer() (*PostRenderer, error) {
 	templ, err := template.ParseFS(postTemplates, "templates/*.gohtml")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := templ.Execute(w, p); err != nil {
-		return err
-	}
-
-	return nil
+	return &PostRenderer{templ: templ}, nil
 }
 
-type PostRenderer struct{
-  templ *template.Template
-}
-
-func NewPostRenderer() (*PostRenderer, error) {
-  templ, err := template.ParseFS(postTemplates, "templates/*.gohtml") 
-
-  if err != nil {
-    return nil, err
-  }
-
-  return &PostRenderer{templ: templ}, nil
-}
-
+// Render renders post into HTML
 func (r *PostRenderer) Render(w io.Writer, p Post) error {
-  
-  if err := r.templ.Execute(w,p); err != nil {
-    return err
-  }
+	return r.templ.ExecuteTemplate(w, "blog.gohtml", p)
+}
 
-  return nil
+// RenderIndex creates an HTML index page given a collection of posts
+func (r *PostRenderer) RenderIndex(w io.Writer, posts []Post) error {
+  return r.templ.ExecuteTemplate(w, "index.gohtml", posts)
+}
+
+type PostViewModel struct {
+	Title, SanitisedTitle, Description, Body string
+	Tags                                     []string
 }

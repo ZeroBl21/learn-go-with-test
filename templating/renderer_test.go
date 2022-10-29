@@ -19,21 +19,36 @@ func TestRender(t *testing.T) {
 		}
 	)
 
-  postRenderer, err := blogrenderer.NewPostRenderer()
+	postRenderer, err := blogrenderer.NewPostRenderer()
 
-  if err != nil {
-    t.Fatal(err)
-  }
+	if err != nil {
+		t.Fatal(err)
+	}
 
-  t.Run("it converts a single post into HTML", func(t *testing.T) {
-    buf := bytes.Buffer{}
+	t.Run("it converts a single post into HTML", func(t *testing.T) {
+		buf := bytes.Buffer{}
 
-    if err := postRenderer.Render(&buf, aPost); err != nil {
-      t.Fatal(err)
-    }
+		if err := postRenderer.Render(&buf, aPost); err != nil {
+			t.Fatal(err)
+		}
 
-    approvals.VerifyString(t, buf.String())
-  })
+		approvals.VerifyString(t, buf.String())
+	})
+
+	t.Run("it renders an index of posts", func(t *testing.T) {
+		buf := bytes.Buffer{}
+		posts := []blogrenderer.Post{
+			{Title: "Hello World"},
+			{Title: "Hello World 2"},
+		}
+
+		if err := postRenderer.RenderIndex(&buf, posts); err != nil {
+			t.Fatal(err)
+		}
+
+		approvals.VerifyString(t, buf.String())
+	})
+
 }
 
 func BenchmarkRender(b *testing.B) {
@@ -46,11 +61,11 @@ func BenchmarkRender(b *testing.B) {
 		}
 	)
 
-  postRenderer, err :=  blogrenderer.NewPostRenderer()
+	postRenderer, err := blogrenderer.NewPostRenderer()
 
-  if err != nil {
-    b.Fatal(err)
-  }
+	if err != nil {
+		b.Fatal(err)
+	}
 
 	b.ResetTimer()
 
