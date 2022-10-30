@@ -68,7 +68,7 @@ func TestStack(t *testing.T) {
 
 		AssertTrue(t, myStackOfStrings.IsEmpty())
 
-    // Concatenate the strings
+		// Concatenate the strings
 		myStackOfStrings.Push("1")
 		myStackOfStrings.Push("2")
 
@@ -78,36 +78,4 @@ func TestStack(t *testing.T) {
 		AssertEqual(t, (firstString + secondString), "21")
 	})
 
-}
-
-func AssertEqual[T comparable](t *testing.T, got, want T) {
-	t.Helper()
-
-	if got != want {
-		t.Errorf("got %v, want %v", got, want)
-	}
-}
-
-func AssertNotEqual[T comparable](t *testing.T, got, want T) {
-	t.Helper()
-
-	if got == want {
-		t.Errorf("didn't want %v", got)
-	}
-}
-
-func AssertTrue(t *testing.T, got bool) {
-	t.Helper()
-
-	if !got {
-		t.Errorf("got %v, want true", got)
-	}
-}
-
-func AssertFalse(t *testing.T, got bool) {
-	t.Helper()
-
-	if got {
-		t.Errorf("got %v, want false", got)
-	}
 }
