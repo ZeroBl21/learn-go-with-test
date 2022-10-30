@@ -68,3 +68,4 @@ func TestReduce(t *testing.T) {
 		AssertEqual(t, Reduce([]string{"a", "b", "c"}, concatenate, ""), "abc")
 	})
 }
+
