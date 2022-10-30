@@ -61,7 +61,7 @@ func TestStack(t *testing.T) {
 	})
 }
 
-func AssertEqual[T comparable](t *testing.T, got, want T) {
+func AssertEqual(t *testing.T, got, want interface{}) {
 	t.Helper()
 
 	if got != want {
@@ -69,7 +69,7 @@ func AssertEqual[T comparable](t *testing.T, got, want T) {
 	}
 }
 
-func AssertNotEqual[T comparable](t *testing.T, got, want T) {
+func AssertNotEqual(t *testing.T, got, want interface{}) {
 	t.Helper()
 
 	if got == want {
